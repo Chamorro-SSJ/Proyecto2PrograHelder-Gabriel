@@ -4,8 +4,7 @@
  */
 package vista;
 
-import clases.AgenciaRentaCar;
-import clases.Auto;
+
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
