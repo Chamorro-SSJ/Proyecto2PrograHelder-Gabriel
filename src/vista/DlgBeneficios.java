@@ -6,11 +6,14 @@ package vista;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import datos.AlmacenamientoBeneficios;
+import logica.Beneficio;
+import vista.DlgNuevoBeneficio;
 
 
 public class DlgBeneficios extends javax.swing.JDialog {
 
-    protected DlgNuevoBeneficio listaBene;
+    protected DlgNuevoBeneficio listaBeneficios;
     private DefaultTableModel tblModel;
 
     /**
@@ -22,10 +25,10 @@ public class DlgBeneficios extends javax.swing.JDialog {
     }
 
     public DlgBeneficios(java.awt.Frame parent, boolean modal,
-            DlgNuevoBeneficio listaBeneficios) {
+            DlgNuevoBeneficio ListaBeneficios) {
         super(parent, modal);
         initComponents();
-        this.listaBene = listaBeneficios;
+        this.listaBeneficios = ListaBeneficios;
     }
 
     /**
@@ -174,10 +177,14 @@ public class DlgBeneficios extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnInsertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarActionPerformed
-        DlgNuevoBeneficio win = new DlgNuevoBeneficio(null, true, listaBene);
+        DlgNuevoBeneficio win = new DlgNuevoBeneficio(this, true);
         win.setTitle("Agregar nuevo beneficio");
         win.setVisible(true);
-        this.listaBene = win.listaBeneficios;
+        Beneficio nuevo = win.getBeneficio(); // ← recuperás el beneficio ingresado
+        if (nuevo != null) {
+        listaBeneficios.add(nuevo);       // ← lo agregás a tu lista
+        muestraTabla();                   // ← actualizás la tabla
+        } 
     }//GEN-LAST:event_btnInsertarActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
@@ -185,24 +192,24 @@ public class DlgBeneficios extends javax.swing.JDialog {
     }//GEN-LAST:event_formWindowActivated
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        if (tblBeneficios.getSelectedRowCount() == 1) {
-            String placa = listaAutos.getListaAutos()[tblBeneficios.getSelectedRow()].getPlaca();
-            int resp = JOptionPane.showConfirmDialog(this, "Quiere eliminar el auto");
-            //System.out.println(resp);
-            if (resp == 0) {  //Sí quiere eliminar el auto
-                if (listaAutos.eliminarAuto(placa)) {
-                    JOptionPane.showMessageDialog(this, "Auto eliminado");
+        int fila = tblBeneficios.getSelectedRow();
+        if (fila >= 0) {
+            int resp = JOptionPane.showConfirmDialog(this, "¿Quiere eliminar el beneficio?");
+            if (resp == JOptionPane.YES_OPTION) {
+                if (listaBeneficios.eliminarBeneficio()) {
+                    JOptionPane.showMessageDialog(this, "Beneficio eliminado");
+                    muestraTabla();
                 }
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar 1 Auto");
+            JOptionPane.showMessageDialog(this, "Debe seleccionar 1 beneficio");
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         if (tblBeneficios.getSelectedRowCount() == 1) {
             int pos = tblBeneficios.getSelectedRow();
-            String placa = listaAutos.getListaAutos()[tblBeneficios.getSelectedRow()].getPlaca();
+            String placa = listaBeneficios.getListaAutos()[tblBeneficios.getSelectedRow()].getPlaca();
             String marca = listaAutos.getListaAutos()[tblBeneficios.getSelectedRow()].getMarca();
             String modelo = listaAutos.getListaAutos()[tblBeneficios.getSelectedRow()].getModelo();
             int anio = listaAutos.getListaAutos()[tblBeneficios.getSelectedRow()].getAnio();

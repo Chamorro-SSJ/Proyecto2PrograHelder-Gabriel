@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class AlmacenamientoBeneficios {
-    private final List<Beneficio> listaBeneficios = new ArrayList<>();
+    public final List<Beneficio> listaBeneficios = new ArrayList<>();
 
     public boolean insertar(Beneficio b) {
         if (existeId(b.getIdBeneficio())){
@@ -46,8 +46,9 @@ public class AlmacenamientoBeneficios {
         return true;
     }
 
-    public void eliminar(int idBeneficio) {
+    public boolean eliminarBeneficio(int idBeneficio) {
         listaBeneficios.removeIf(x -> x.getIdBeneficio() == idBeneficio);
+        return true;
     }
 
     public List<Beneficio> listarTodos() { return new ArrayList<>(listaBeneficios); }
