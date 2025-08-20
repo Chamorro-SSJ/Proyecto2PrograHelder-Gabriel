@@ -4,22 +4,17 @@
  */
 package vista;
 
-import clases.AgenciaRentaCar;
-import clases.Auto;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author jonat
- */
+
 public class DlgBeneficios extends javax.swing.JDialog {
 
-    protected AgenciaRentaCar listaAutos;
+    protected DlgNuevoBeneficio listaBene;
     private DefaultTableModel tblModel;
 
     /**
-     * Creates new form DlgGestionAutos
+     * Creates new form DlgGestionBeneficio
      */
     public DlgBeneficios(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -27,10 +22,10 @@ public class DlgBeneficios extends javax.swing.JDialog {
     }
 
     public DlgBeneficios(java.awt.Frame parent, boolean modal,
-            AgenciaRentaCar listaAutos) {
+            DlgNuevoBeneficio listaBeneficios) {
         super(parent, modal);
         initComponents();
-        this.listaAutos = listaAutos;
+        this.listaBene = listaBeneficios;
     }
 
     /**
@@ -49,7 +44,7 @@ public class DlgBeneficios extends javax.swing.JDialog {
         btnEditar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblAutos = new javax.swing.JTable();
+        tblBeneficios = new javax.swing.JTable();
         lblCant = new javax.swing.JLabel();
         txtCant = new javax.swing.JTextField();
 
@@ -107,7 +102,7 @@ public class DlgBeneficios extends javax.swing.JDialog {
                 .addComponent(lblBuscar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnInsertar, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -128,7 +123,7 @@ public class DlgBeneficios extends javax.swing.JDialog {
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
-        tblAutos.setModel(new javax.swing.table.DefaultTableModel(
+        tblBeneficios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -136,7 +131,7 @@ public class DlgBeneficios extends javax.swing.JDialog {
 
             }
         ));
-        jScrollPane1.setViewportView(tblAutos);
+        jScrollPane1.setViewportView(tblBeneficios);
 
         lblCant.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblCant.setText("Cantidad de registros:");
@@ -179,11 +174,10 @@ public class DlgBeneficios extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnInsertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarActionPerformed
-        DlgNuevoAuto win = new DlgNuevoAuto(null, true,
-                listaAutos);
-        win.setTitle("Agregar Auto");
+        DlgNuevoBeneficio win = new DlgNuevoBeneficio(null, true, listaBene);
+        win.setTitle("Agregar nuevo beneficio");
         win.setVisible(true);
-        this.listaAutos = win.listaAutos;
+        this.listaBene = win.listaBeneficios;
     }//GEN-LAST:event_btnInsertarActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
@@ -191,8 +185,8 @@ public class DlgBeneficios extends javax.swing.JDialog {
     }//GEN-LAST:event_formWindowActivated
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        if (tblAutos.getSelectedRowCount() == 1) {
-            String placa = listaAutos.getListaAutos()[tblAutos.getSelectedRow()].getPlaca();
+        if (tblBeneficios.getSelectedRowCount() == 1) {
+            String placa = listaAutos.getListaAutos()[tblBeneficios.getSelectedRow()].getPlaca();
             int resp = JOptionPane.showConfirmDialog(this, "Quiere eliminar el auto");
             //System.out.println(resp);
             if (resp == 0) {  //Sí quiere eliminar el auto
@@ -206,13 +200,13 @@ public class DlgBeneficios extends javax.swing.JDialog {
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        if (tblAutos.getSelectedRowCount() == 1) {
-            int pos = tblAutos.getSelectedRow();
-            String placa = listaAutos.getListaAutos()[tblAutos.getSelectedRow()].getPlaca();
-            String marca = listaAutos.getListaAutos()[tblAutos.getSelectedRow()].getMarca();
-            String modelo = listaAutos.getListaAutos()[tblAutos.getSelectedRow()].getModelo();
-            int anio = listaAutos.getListaAutos()[tblAutos.getSelectedRow()].getAnio();
-            double precio = listaAutos.getListaAutos()[tblAutos.getSelectedRow()].getPrecioPorDia();
+        if (tblBeneficios.getSelectedRowCount() == 1) {
+            int pos = tblBeneficios.getSelectedRow();
+            String placa = listaAutos.getListaAutos()[tblBeneficios.getSelectedRow()].getPlaca();
+            String marca = listaAutos.getListaAutos()[tblBeneficios.getSelectedRow()].getMarca();
+            String modelo = listaAutos.getListaAutos()[tblBeneficios.getSelectedRow()].getModelo();
+            int anio = listaAutos.getListaAutos()[tblBeneficios.getSelectedRow()].getAnio();
+            double precio = listaAutos.getListaAutos()[tblBeneficios.getSelectedRow()].getPrecioPorDia();
 
             Auto auto = new Auto(placa, marca, modelo, anio, precio);
 
@@ -243,8 +237,8 @@ public class DlgBeneficios extends javax.swing.JDialog {
             }
         }
 
-        tblAutos.setModel(tblModel);
-        txtCant.setText(String.valueOf(tblAutos.getRowCount()));
+        tblBeneficios.setModel(tblModel);
+        txtCant.setText(String.valueOf(tblBeneficios.getRowCount()));
     }//GEN-LAST:event_txtBuscarKeyReleased
 
     private void muestraTabla() {
@@ -258,8 +252,8 @@ public class DlgBeneficios extends javax.swing.JDialog {
             tblModel.addRow(row);
         }
 
-        tblAutos.setModel(tblModel);
-        txtCant.setText(String.valueOf(tblAutos.getRowCount()));
+        tblBeneficios.setModel(tblModel);
+        txtCant.setText(String.valueOf(tblBeneficios.getRowCount()));
     }
 
     /**
@@ -313,7 +307,7 @@ public class DlgBeneficios extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblBuscar;
     private javax.swing.JLabel lblCant;
-    private javax.swing.JTable tblAutos;
+    private javax.swing.JTable tblBeneficios;
     private javax.swing.JTextField txtBuscar;
     private javax.swing.JTextField txtCant;
     // End of variables declaration//GEN-END:variables

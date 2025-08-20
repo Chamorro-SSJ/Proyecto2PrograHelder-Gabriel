@@ -76,8 +76,8 @@
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="txtPlaca" pref="142" max="32767" attributes="0"/>
-                              <Component id="txtMarca" max="32767" attributes="0"/>
+                              <Component id="txtIdBene" pref="142" max="32767" attributes="0"/>
+                              <Component id="txtNombreBene" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="lblDescripcion" min="-2" max="-2" attributes="0"/>
@@ -89,7 +89,7 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="txtMonto" min="-2" pref="140" max="-2" attributes="0"/>
+                      <Component id="txtMontoBene" min="-2" pref="140" max="-2" attributes="0"/>
                       <Component id="jScrollPane1" min="-2" pref="328" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="72" max="32767" attributes="0"/>
@@ -104,13 +104,13 @@
                           <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="lblPlaca" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtPlaca" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtIdBene" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="lblDescripcion" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="lblMarca" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtMarca" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtNombreBene" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
@@ -121,7 +121,7 @@
                   <EmptySpace pref="18" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="lblMonto" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="txtMonto" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtMontoBene" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
               </Group>
@@ -137,7 +137,7 @@
             <Property name="text" type="java.lang.String" value="IdBeneficio:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtPlaca">
+        <Component class="javax.swing.JTextField" name="txtIdBene">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="14" style="0"/>
@@ -152,7 +152,7 @@
             <Property name="text" type="java.lang.String" value="Nombre:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtMarca">
+        <Component class="javax.swing.JTextField" name="txtNombreBene">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="14" style="0"/>
@@ -175,7 +175,7 @@
             <Property name="text" type="java.lang.String" value="Monto:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtMonto">
+        <Component class="javax.swing.JTextField" name="txtMontoBene">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="14" style="0"/>
@@ -189,7 +189,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JTextArea" name="txtDescripcion">
+            <Component class="javax.swing.JTextArea" name="txtDescripcionBene">
               <Properties>
                 <Property name="columns" type="int" value="20"/>
                 <Property name="rows" type="int" value="5"/>

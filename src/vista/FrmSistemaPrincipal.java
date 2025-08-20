@@ -45,8 +45,18 @@ public class FrmSistemaPrincipal extends javax.swing.JFrame {
         });
 
         btnGestionCarre.setText("Gestion Carreras");
+        btnGestionCarre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGestionCarreActionPerformed(evt);
+            }
+        });
 
         btnGestionBene.setText("Gestion Beneficios");
+        btnGestionBene.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGestionBeneActionPerformed(evt);
+            }
+        });
 
         btnAsignarBene.setText("Asignar Beneficios");
         btnAsignarBene.addActionListener(new java.awt.event.ActionListener() {
@@ -110,15 +120,44 @@ public class FrmSistemaPrincipal extends javax.swing.JFrame {
 
     private void btnGestionEstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGestionEstActionPerformed
         // TODO add your handling code here:
+        DlgEstudiante dlg = new DlgEstudiante(this, true);
+        dlg.setLocationRelativeTo(this); // Centra la nueva ventana respecto a la actual
+        dlg.setVisible(true); // Muestra el dlg
+        this.setVisible(false);//Esconde esta ventana
     }//GEN-LAST:event_btnGestionEstActionPerformed
 
     private void btnAsignarBeneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignarBeneActionPerformed
         // TODO add your handling code here:
+        FrmAsignarBeneficios frm = new FrmAsignarBeneficios(); 
+        frm.setLocationRelativeTo(this); // Centra la nueva ventana respecto a la actual
+        frm.setVisible(true); // Muestra la nueva ventana
+        this.setVisible(false);//Esconde esta ventana
     }//GEN-LAST:event_btnAsignarBeneActionPerformed
 
     private void btnPagosMensualesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagosMensualesActionPerformed
         // TODO add your handling code here:
+        DlgPagosMensuales dlg = new DlgPagosMensuales(this, true);
+        dlg.setLocationRelativeTo(this);//Centra la ventana respecto a la actual
+        dlg.setVisible(true);//Muestra la nueva ventana
+        this.setVisible(false);//Esconde esta ventana
+        
     }//GEN-LAST:event_btnPagosMensualesActionPerformed
+
+    private void btnGestionCarreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGestionCarreActionPerformed
+        // TODO add your handling code here:
+        DlgCarreras dlg = new DlgCarreras(this, true);
+        dlg.setLocationRelativeTo(this); // Centra el dlg como el actual
+        dlg.setVisible(true); // Muestra el diálogo
+        this.setVisible(false);//Esconde esta ventana
+    }//GEN-LAST:event_btnGestionCarreActionPerformed
+
+    private void btnGestionBeneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGestionBeneActionPerformed
+        // TODO add your handling code here:
+        DlgBeneficios dlg = new DlgBeneficios(this, true);
+        dlg.setLocationRelativeTo(this); // Centra la ventana igual al actual
+        dlg.setVisible(true); // Muestra el dlg
+        this.setVisible(false);//Esconde esta ventana
+    }//GEN-LAST:event_btnGestionBeneActionPerformed
 
     /**
      * @param args the command line arguments
