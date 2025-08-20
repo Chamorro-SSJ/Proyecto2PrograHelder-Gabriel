@@ -209,7 +209,7 @@ public class DlgBeneficios extends javax.swing.JDialog {
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         if (tblBeneficios.getSelectedRowCount() == 1) {
             int pos = tblBeneficios.getSelectedRow();
-            String placa = listaBeneficios.getListaAutos()[tblBeneficios.getSelectedRow()].getPlaca();
+            String placa = listaBeneficios.getTitle()[tblBeneficios.getSelectedRow()].getPlaca();
             String marca = listaAutos.getListaAutos()[tblBeneficios.getSelectedRow()].getMarca();
             String modelo = listaAutos.getListaAutos()[tblBeneficios.getSelectedRow()].getModelo();
             int anio = listaAutos.getListaAutos()[tblBeneficios.getSelectedRow()].getAnio();
