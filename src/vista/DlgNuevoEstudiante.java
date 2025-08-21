@@ -43,6 +43,7 @@ public class DlgNuevoEstudiante extends javax.swing.JDialog {
     }
 
 
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -216,7 +217,6 @@ public class DlgNuevoEstudiante extends javax.swing.JDialog {
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         btnGuardar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/guardar.png"))); // NOI18N
         btnGuardar.setText("Guardar");
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -225,7 +225,6 @@ public class DlgNuevoEstudiante extends javax.swing.JDialog {
         });
 
         btnCancelar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cancelar.png"))); // NOI18N
         btnCancelar.setText("Cancelar");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -287,8 +286,7 @@ public class DlgNuevoEstudiante extends javax.swing.JDialog {
 }
 
 }
-
-    public void initInsertar(AlmacenamientoEstudiantes ae, AlmacenamientoCarreras ac) {
+public void initInsertar(AlmacenamientoEstudiantes ae, AlmacenamientoCarreras ac) {
     this.almEstudiantes = ae;
     this.almCarreras = ac;
     cargarCarreras();
@@ -323,9 +321,9 @@ public void initEditar(Estudiante estudiante, AlmacenamientoEstudiantes almacena
 
 }
 
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
 
-    String cedula = txtCedulaEst.getText().trim();
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+ String cedula = txtCedulaEst.getText().trim();
     String nombre = txtNombreEst.getText().trim();
     Date fechaNac = dtFechaNac.getDate();
     String direccion = txtDireccion.getText().trim();
@@ -356,6 +354,7 @@ public void initEditar(Estudiante estudiante, AlmacenamientoEstudiantes almacena
     almEstudiantes.insertar(nuevo, almCarreras);
     JOptionPane.showMessageDialog(this, "Estudiante guardado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
     dispose();
+
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
@@ -408,7 +407,7 @@ public void initEditar(Estudiante estudiante, AlmacenamientoEstudiantes almacena
         //</editor-fold>
 
         /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 DlgNuevoEstudiante dialog = new DlgNuevoEstudiante(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -420,6 +419,7 @@ public void initEditar(Estudiante estudiante, AlmacenamientoEstudiantes almacena
                 dialog.setVisible(true);
             }
         });
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

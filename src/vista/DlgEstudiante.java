@@ -5,12 +5,17 @@
 package vista;
 
 
+
 import datos.AlmacenamientoEstudiantes;
 import datos.AlmacenamientoCarreras;
 import java.awt.EventQueue;
 import java.awt.Frame;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.Window;
+import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -26,6 +31,7 @@ public class DlgEstudiante extends javax.swing.JDialog {
     private AlmacenamientoEstudiantes almEstudiantes;
     private AlmacenamientoCarreras almCarreras;
     private List<Estudiante> modelo;
+
     
     
 
@@ -33,12 +39,24 @@ public class DlgEstudiante extends javax.swing.JDialog {
     /**
      * Creates new form DlgGestionAutos
      */
-    public DlgEstudiante(Frame parent, AlmacenamientoEstudiantes almEstudiantes) {
+     public DlgEstudiante(JFrame parent, AlmacenamientoEstudiantes almEstudiantes, AlmacenamientoCarreras almCarreras) {
     super(parent, true);
     this.almEstudiantes = almEstudiantes;
-    this.almCarreras = almCarreras;
-    initComponents(); // Tu método visual
+    this.almCarreras = almCarreras; 
+
+    initComponents();  
+
+    setButtonIcon(btnInsertar, "/img/insert.png");
+    setButtonIcon(btnEditar, "/img/editar.png");
+    setButtonIcon(btnEliminar, "/img/eliminar.png");
+
+    setWindowIcon();
+
+    // Inicializar la lista de estudiantes
+    modelo = almEstudiantes.listarTodos();
+    cargarTabla(modelo);
 }
+
   
 
     /**
@@ -80,7 +98,6 @@ public class DlgEstudiante extends javax.swing.JDialog {
         });
 
         btnInsertar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnInsertar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/insert.png"))); // NOI18N
         btnInsertar.setText("Insertar");
         btnInsertar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -89,7 +106,6 @@ public class DlgEstudiante extends javax.swing.JDialog {
         });
 
         btnEditar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/editar.png"))); // NOI18N
         btnEditar.setText("Editar");
         btnEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -98,7 +114,6 @@ public class DlgEstudiante extends javax.swing.JDialog {
         });
 
         btnEliminar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/eliminar.png"))); // NOI18N
         btnEliminar.setText("Eliminar");
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -185,43 +200,82 @@ public class DlgEstudiante extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+private void setButtonIcon(javax.swing.JButton button, String resourcePath) {
+    java.net.URL iconURL = getClass().getResource(resourcePath);
+    if (iconURL != null) {
+        button.setIcon(new javax.swing.ImageIcon(iconURL));
+    } else {
+        System.err.println("No se encontró el recurso: " + resourcePath);
+    }
+}
+
+private void setWindowIcon() {
+        URL url = getClass().getResource("/img/icon.png");
+        if (url != null) {
+            Image icon = Toolkit.getDefaultToolkit().getImage(url);
+            setIconImage(icon); // ← Esto aplica el ícono a la ventana
+        } else {
+            System.err.println("No se encontró el ícono /imagenes/logo.png");
+        }
+    }
 
    private void cargarTabla(List<Estudiante> lista) {
-    modelo = lista;
-    DefaultTableModel m = (DefaultTableModel) tblEstudiante.getModel();
-    m.setRowCount(0); // Limpiar tabla
+     if (lista == null) {
+        lista = List.of(); // Evita null
+    }
 
+    modelo = lista; // Actualiza la lista modelo
+
+    // Crear un modelo de tabla con columnas definidas y no editables
+    DefaultTableModel m = new DefaultTableModel(
+        new Object[][]{},
+        new String[]{"Nombre", "Carnet", "Carrera"}
+    ) {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
+
+    // Rellenar la tabla
     for (Estudiante e : lista) {
+        // Obtener el nombre de la carrera usando Optional
         String nombreCarrera = almCarreras.buscarPorId(e.getIdCarrera())
-            .map(Carrera::getNomCarrera)
-            .orElse("Desconocida");
+                                         .map(Carrera::getNomCarrera)
+                                         .orElse("Desconocida");
 
-        m.addRow(new Object[] {
+        m.addRow(new Object[]{
             e.getNombre(),
             e.getCarnet(),
             nombreCarrera
         });
     }
 
-    txtCant.setText(String.valueOf(lista.size()));
+    tblEstudiante.setModel(m); // Actualiza la tabla
+
+    if (txtCant != null) { // Evita NullPointerException
+        txtCant.setText(String.valueOf(lista.size()));
+    }
+
 }
 
 
 
     private void btnInsertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarActionPerformed
-    DlgNuevoEstudiante dlg = new DlgNuevoEstudiante((java.awt.Frame) this.getParent(), true);
+     DlgNuevoEstudiante dlg = new DlgNuevoEstudiante((java.awt.Frame) this.getParent(), true);
     dlg.initInsertar(almEstudiantes, almCarreras);
     dlg.setVisible(true);
     cargarTabla(almEstudiantes.listarTodos());
+
     }//GEN-LAST:event_btnInsertarActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
-        cargarTabla(modelo);
+          cargarTabla(modelo);
     }//GEN-LAST:event_formWindowActivated
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
                                              
-    int fila = tblEstudiante.getSelectedRow();
+     int fila = tblEstudiante.getSelectedRow();
     if (fila >= 0) {
         Estudiante seleccionado = modelo.get(fila);
         almEstudiantes.eliminarPorCarnet(seleccionado.getCarnet());
@@ -229,10 +283,10 @@ public class DlgEstudiante extends javax.swing.JDialog {
     } else {
         JOptionPane.showMessageDialog(this, "Debe seleccionar un estudiante para eliminar", "Advertencia", JOptionPane.WARNING_MESSAGE);
     }
+
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-                                       
     int fila = tblEstudiante.getSelectedRow();
     
     if (fila >= 0) {
@@ -257,6 +311,7 @@ public class DlgEstudiante extends javax.swing.JDialog {
             "Advertencia", 
             JOptionPane.WARNING_MESSAGE);
     }
+
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
@@ -267,6 +322,8 @@ public class DlgEstudiante extends javax.swing.JDialog {
     txtCant.setText(String.valueOf(filtrados.size()));
 
 
+
+
     }//GEN-LAST:event_txtBuscarKeyReleased
 
 
@@ -274,12 +331,13 @@ public class DlgEstudiante extends javax.swing.JDialog {
      * @param args the command line arguments
      */
       public static void main(String args[]) {
-       EventQueue.invokeLater(() -> {
-       AlmacenamientoEstudiantes almEstudiantes = new AlmacenamientoEstudiantes();
-       AlmacenamientoCarreras almCarreras = new AlmacenamientoCarreras();
-       DlgEstudiante dialog = new DlgEstudiante(new JFrame(), almEstudiantes);
-       dialog.setVisible(true);
-       });
+    EventQueue.invokeLater(() -> {
+        AlmacenamientoEstudiantes almEstudiantes = new AlmacenamientoEstudiantes();
+        AlmacenamientoCarreras almCarreras = new AlmacenamientoCarreras();
+        DlgEstudiante dialog = new DlgEstudiante(new JFrame(), almEstudiantes, almCarreras);
+        dialog.setVisible(true);
+    });
+
     }
     
 
