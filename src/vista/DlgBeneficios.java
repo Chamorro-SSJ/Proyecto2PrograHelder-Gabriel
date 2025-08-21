@@ -6,9 +6,7 @@ package vista;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import datos.AlmacenamientoBeneficios;
 import logica.Beneficio;
-import vista.DlgNuevoBeneficio;
 
 
 public class DlgBeneficios extends javax.swing.JDialog {
@@ -177,7 +175,8 @@ public class DlgBeneficios extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnInsertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarActionPerformed
-        DlgNuevoBeneficio win = new DlgNuevoBeneficio(this, true);
+        DlgNuevoBeneficio win;
+        win = new DlgNuevoBeneficio(this, true);
         win.setTitle("Agregar nuevo beneficio");
         win.setVisible(true);
         Beneficio nuevo = win.getBeneficio(); // ← recuperás el beneficio ingresado
@@ -208,24 +207,18 @@ public class DlgBeneficios extends javax.swing.JDialog {
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         if (tblBeneficios.getSelectedRowCount() == 1) {
-            int pos = tblBeneficios.getSelectedRow();
-            String placa = listaBeneficios.getTitle()[tblBeneficios.getSelectedRow()].getPlaca();
-            String marca = listaAutos.getListaAutos()[tblBeneficios.getSelectedRow()].getMarca();
-            String modelo = listaAutos.getListaAutos()[tblBeneficios.getSelectedRow()].getModelo();
-            int anio = listaAutos.getListaAutos()[tblBeneficios.getSelectedRow()].getAnio();
-            double precio = listaAutos.getListaAutos()[tblBeneficios.getSelectedRow()].getPrecioPorDia();
+        int fila = tblBeneficios.getSelectedRow();
+        Beneficio beneficio = listaBeneficios.get(fila); // ← Asegúrate de tener esta lista
 
-            Auto auto = new Auto(placa, marca, modelo, anio, precio);
-
-            DlgNuevoAuto winEditar = new DlgNuevoAuto(null, true, listaAutos, auto, pos);
-
-            winEditar.setTitle("Editar Auto");
-            winEditar.setVisible(true);
-
-            this.listaAutos = winEditar.listaAutos;
-        } else {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar 1 Auto");
+        if (this.getTitle().equals("Editar Beneficio")) {
+            txtidBene.setText(beneficio.getPlaca()); // ← si es placa, o el campo correcto
+            txtidBene.setEnabled(false);
+            txtNombreBene.setText(beneficio.getBeneficio());
+            txtMontoBene.setText(String.valueOf(beneficio.getMonto()));
         }
+    } else {
+        JOptionPane.showMessageDialog(this, "Debe seleccionar 1 beneficio");
+    }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
