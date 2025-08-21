@@ -16,7 +16,7 @@ public class PagosMensuales {
     private double pagoNeto;           // total - deducciones
 
     public PagosMensuales() {}
-
+    //holaaaaaaaaa
     public PagosMensuales(int idPago, LocalDate fechCreacion, int mes, int anio,
                           LocalDate fechaPago, String estudiante,
                           double totalBeneficios, double deducSeguro,
