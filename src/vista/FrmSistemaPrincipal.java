@@ -4,6 +4,9 @@
  */
 package vista;
 
+import java.awt.Window;
+import javax.swing.SwingUtilities;
+
 /**
  *
  * @author helde
