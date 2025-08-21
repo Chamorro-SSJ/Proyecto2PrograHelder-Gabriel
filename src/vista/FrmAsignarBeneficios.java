@@ -4,11 +4,23 @@
  */
 package vista;
 
+import datos.AlmacenamientoBeneficios;
+import datos.AlmacenamientoEstudiantes;
+import java.util.List;
+import logica.Beneficio;
+import logica.Estudiante;
+import datos.AlmacenamientoBeneficiosEstudiantes;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import logica.BeneficioEstudiante;
 /**
  *
  * @author helde
  */
 public class FrmAsignarBeneficios extends javax.swing.JFrame {
+private AlmacenamientoEstudiantes almacenamientoEstudiantes = new AlmacenamientoEstudiantes();
+private AlmacenamientoBeneficios almacenamientoBeneficios = new AlmacenamientoBeneficios();
+private AlmacenamientoBeneficiosEstudiantes almacenamientoBeneficiosEstudiantes = new AlmacenamientoBeneficiosEstudiantes();
 
     /**
      * Creates new form FrmAsignarBeneficios
@@ -33,7 +45,7 @@ public class FrmAsignarBeneficios extends javax.swing.JFrame {
         btnAsignar = new javax.swing.JButton();
         btnQuitar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblAsigBene = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -46,10 +58,20 @@ public class FrmAsignarBeneficios extends javax.swing.JFrame {
         cmbxIdBeneficios.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         btnAsignar.setText("Asignar");
+        btnAsignar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAsignarActionPerformed(evt);
+            }
+        });
 
         btnQuitar.setText("Quitar");
+        btnQuitar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnQuitarActionPerformed(evt);
+            }
+        });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblAsigBene.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
                 {null, null},
@@ -60,7 +82,7 @@ public class FrmAsignarBeneficios extends javax.swing.JFrame {
                 "Cedula", "Id Beneficio"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblAsigBene);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -101,6 +123,57 @@ public class FrmAsignarBeneficios extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAsignarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignarActionPerformed
+      String cedula = (String) cmbxCedEstBene.getSelectedItem();
+        int idBeneficio = Integer.parseInt((String) cmbxIdBeneficios.getSelectedItem());
+
+    try {
+        almacenamientoBeneficiosEstudiantes.asignar(cedula, idBeneficio, almacenamientoEstudiantes, almacenamientoBeneficios);
+        actualizarTabla(cedula);
+    } catch (IllegalArgumentException ex) {
+        JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    }//GEN-LAST:event_btnAsignarActionPerformed
+
+    private void btnQuitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarActionPerformed
+        String cedula = (String) cmbxCedEstBene.getSelectedItem();
+    int idBeneficio = (int) cmbxIdBeneficios.getSelectedItem();
+
+    try {
+        almacenamientoBeneficiosEstudiantes.quitar(cedula, idBeneficio);
+        actualizarTabla(cedula);
+    } catch (IllegalArgumentException ex) {
+        JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    }//GEN-LAST:event_btnQuitarActionPerformed
+    private void actualizarTabla(String cedula) {
+    List<BeneficioEstudiante> lista = almacenamientoBeneficiosEstudiantes.listarPorEstudiante(cedula);
+    DefaultTableModel modelo = (DefaultTableModel) tblAsigBene.getModel();
+    modelo.setRowCount(0); // limpiar
+
+    for (BeneficioEstudiante be : lista) {
+        modelo.addRow(new Object[] {
+            be.getCedula(),
+            be.getIdBeneficio()
+        });
+    }
+}
+private void cargarComboBoxes() {
+    cmbxCedEstBene.removeAllItems();
+   for (Estudiante est : almacenamientoEstudiantes.listarTodos()) {
+    cmbxCedEstBene.addItem(est.getCedula());
+}
+
+
+    cmbxIdBeneficios.removeAllItems();
+    for (Beneficio ben : almacenamientoBeneficios.listarTodos()) {
+      cmbxIdBeneficios.addItem(String.valueOf(ben.getIdBeneficio()));
+
+}
+
+}
+
 
     /**
      * @param args the command line arguments
@@ -143,8 +216,8 @@ public class FrmAsignarBeneficios extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cmbxCedEstBene;
     private javax.swing.JComboBox<String> cmbxIdBeneficios;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel lblCedulaEstudiante;
     private javax.swing.JLabel lblIdBeneficios;
+    private javax.swing.JTable tblAsigBene;
     // End of variables declaration//GEN-END:variables
 }

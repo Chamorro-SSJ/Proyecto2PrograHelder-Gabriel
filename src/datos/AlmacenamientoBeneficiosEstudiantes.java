@@ -29,6 +29,9 @@ public class AlmacenamientoBeneficiosEstudiantes {
     public void quitar(String cedula, int idBeneficio) {
         lista.removeIf(x -> x.getCedula().equalsIgnoreCase(cedula) && x.getIdBeneficio() == idBeneficio);
     }
+    public boolean estaAsignado(String cedula, int idBeneficio) {
+    return lista.stream().anyMatch(x -> x.getCedula().equalsIgnoreCase(cedula) && x.getIdBeneficio() == idBeneficio);
+}
 
     public List<BeneficioEstudiante> listarPorEstudiante(String cedula) {
         return lista.stream().filter(x -> x.getCedula().equalsIgnoreCase(cedula))
