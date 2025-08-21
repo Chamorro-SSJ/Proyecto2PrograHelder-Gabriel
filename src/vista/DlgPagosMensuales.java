@@ -4,6 +4,16 @@
  */
 package vista;
 
+import java.time.LocalDate;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import logica.PagosMensuales;
+import datos.AlmacenamientoBeneficios;
+import datos.AlmacenamientoBeneficiosEstudiantes;
+import datos.AlmacenamientoCarreras;
+import datos.AlmacenamientoEstudiantes;
+import datos.AlmacenamientoPagosMensuales;
 /**
  *
  * @author helde
@@ -305,13 +315,106 @@ public class DlgPagosMensuales extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
+    AlmacenamientoEstudiantes almEst = new AlmacenamientoEstudiantes();
+    AlmacenamientoBeneficiosEstudiantes almBE = new AlmacenamientoBeneficiosEstudiantes();
+    AlmacenamientoBeneficios almBen = new AlmacenamientoBeneficios();
+    AlmacenamientoPagosMensuales almPagos = new AlmacenamientoPagosMensuales();
+    
+    
+    private void mostrarEnTabla(List<PagosMensuales> lista) {
+        DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+        modelo.setRowCount(0);
 
+        for (PagosMensuales p : lista) {
+            modelo.addRow(new Object[] {
+            p.getIdPago(),
+            p.getFechCreacion(),
+            PagosMensuales.nombreMes(p.getMes()),
+            p.getAnio(),
+            p.getFechaPago(),
+            p.getEstudiante(),
+            p.getTotalBeneficios(),
+            p.getDeducSeguro(),
+            p.getDeducRenta(),
+            p.getPagoNeto()
+            });
+        }
+    }
+
+ 
+    public void aplicarFiltro() {
+        String texto = jTextPane1.getText().trim();
+        String cedula = jCheckBox1.isSelected() ? texto : null;
+        Integer mes = null;
+        if (jCheckBox2.isSelected()) {
+        int idx = cmbxMes.getSelectedIndex();
+        if (idx >= 0) {
+            mes = idx + 1;
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione un mes válido.");
+            return;
+           }
+        }
+        Integer anio = null;
+        if (jCheckBox3.isSelected()) {
+            String textoAnio = txtAnnio.getText().trim();
+            if (textoAnio.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Debe ingresar un año.");
+                return;
+            }
+             try {
+                anio = Integer.parseInt(textoAnio);
+                if (anio < 1900 || anio > LocalDate.now().getYear()) {
+                    JOptionPane.showMessageDialog(this, "Año fuera de rango válido.");
+                    return;
+                }
+                } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Formato de año inválido. Ingrese solo números.");
+                return;
+            }
+}
+
+        List<PagosMensuales> filtrados = almPagos.filtrar(cedula, mes, anio);
+        mostrarEnTabla(filtrados);
+    }
+    
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
+        btnGuardar.addActionListener(e -> {
+        try {
+            int mes = cmbxMes.getSelectedIndex() + 1;
+            int anio = Integer.parseInt(txtAnnio.getText().trim());
+            LocalDate fechaPago = LocalDate.parse(txtFechaAct.getText().trim()); // Asegurate del formato: yyyy-MM-dd
+
+            List<PagosMensuales> generados = almPagos.generarPlanilla(
+            mes, anio, fechaPago, almEst, almBE, almBen
+        );
+
+        mostrarEnTabla(generados);
+        JOptionPane.showMessageDialog(null, "Planilla generada exitosamente.");
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Advertencia", JOptionPane.ERROR_MESSAGE);
+    }
+});
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnMostrarPlanillaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarPlanillaActionPerformed
         // TODO add your handling code here:
+        btnMostrarPlanilla.addActionListener(e -> {
+        try {
+            int mes = cmbxMesMostrar.getSelectedIndex() + 1;
+            int anio = Integer.parseInt(txtAnnioMostrar.getText().trim());
+
+            List<PagosMensuales> planilla = almPagos.listarPorMesAnio(mes, anio);
+            mostrarEnTabla(planilla);
+
+            double total = planilla.stream().mapToDouble(PagosMensuales::getPagoNeto).sum();
+            JOptionPane.showMessageDialog(null, "Total pagado en la planilla: ₡" + String.format("%.2f", total));
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Advertencia", JOptionPane.ERROR_MESSAGE);
+            }
+        });
     }//GEN-LAST:event_btnMostrarPlanillaActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
