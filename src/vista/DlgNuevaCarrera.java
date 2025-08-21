@@ -4,43 +4,28 @@
  */
 package vista;
 
-import clases.AgenciaRentaCar;
-import clases.Auto;
+
+import datos.AlmacenamientoCarreras;
 import javax.swing.JOptionPane;
+import logica.Carrera;
 
 /**
  *
  * @author jonat
  */
 public class DlgNuevaCarrera extends javax.swing.JDialog {
+     private AlmacenamientoCarreras almCarreras;
+     private boolean modoEdicion;
+     private Carrera carrera;
 
-    AgenciaRentaCar listaAutos;
-    Auto auto;
-    int pos;
+
     /**
      * Creates new form DlgNuevoAuto
      */
-    public DlgNuevaCarrera(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
-        initComponents();
-    }
-
-    public DlgNuevaCarrera(java.awt.Frame parent, boolean modal,
-            AgenciaRentaCar listaAutos) {
-        super(parent, modal);
-        initComponents();
-        this.listaAutos = listaAutos;
-    }
-    
-    public DlgNuevaCarrera(java.awt.Frame parent, boolean modal,
-            AgenciaRentaCar listaAutos, Auto auto, int pos) {
-        super(parent, modal);
-        initComponents();
-        this.listaAutos = listaAutos;
-        this.auto = auto;
-        this.pos = pos;
-    }
-
+   public DlgNuevaCarrera(java.awt.Frame parent, boolean modal) {
+    super(parent, modal);
+    initComponents(); // Ya lo tienes
+   }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -128,7 +113,6 @@ public class DlgNuevaCarrera extends javax.swing.JDialog {
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         btnGuardar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/guardar.png"))); // NOI18N
         btnGuardar.setText("Guardar");
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -137,7 +121,6 @@ public class DlgNuevaCarrera extends javax.swing.JDialog {
         });
 
         btnCancelar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cancelar.png"))); // NOI18N
         btnCancelar.setText("Cancelar");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -186,60 +169,42 @@ public class DlgNuevaCarrera extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+public void initInsertar(AlmacenamientoCarreras almCarreras) {
+    this.almCarreras = almCarreras;
+    modoEdicion = false;
+}
+
+public void initEditar(Carrera c, AlmacenamientoCarreras almCarreras) {
+    this.almCarreras = almCarreras;
+    this.carrera = c;
+    modoEdicion = true;
+
+    txtIdCarrera.setText(String.valueOf(c.getIdCarrera()));
+    txtNombreCarrera.setText(c.getNomCarrera());
+    cmbxGrado.setSelectedItem(c.getGrado());
+    txtIdCarrera.setEditable(false);
+}
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        Auto auto = new Auto();
-        //Validación de campos vacíos
-        if (txtIdCarrera.getText().isBlank()
-                || txtNombreCarrera.getText().isBlank()
-                || txtModelo.getText().isBlank()
-                || txtPrecio.getText().isBlank()
-                || txtAnio.getText().isBlank()) {
+      int id = Integer.parseInt(txtIdCarrera.getText());
+    String nombre = txtNombreCarrera.getText();
+    String grado = (String)cmbxGrado.getSelectedItem();
 
-            JOptionPane.showMessageDialog(this, "Hay campos vacíos");
-        } else {
+    if (modoEdicion) {
+        carrera.setNomCarrera(nombre);
+        carrera.setGrado(grado);
+        almCarreras.modificar(carrera);
+    } else {
+        Carrera nueva = new Carrera(id, nombre, grado);
+        almCarreras.insertar(nueva);
+    }
 
-            auto.setPlaca(txtIdCarrera.getText());
-            auto.setMarca(txtNombreCarrera.getText());
-            auto.setModelo(txtModelo.getText());
-
-            //Agregar try/catch
-            try {
-                auto.setAnio(Integer.parseInt(txtAnio.getText()));
-                auto.setPrecioPorDia(Double.parseDouble(txtPrecio.getText()));
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Año y precio deben ser numéricos");
-            }
-
-            switch (this.getTitle()) {
-                case "Agregar Auto" -> {
-                    if (listaAutos.agregarAuto(auto)) {
-                        JOptionPane.showMessageDialog(this, "Auto agregado con éxito");
-                        this.dispose();
-                    }else{
-                        JOptionPane.showMessageDialog(this, "Vector Lleno");
-                    }
-                }
-                case "Editar Auto" -> {
-                    if (listaAutos.editarAuto(pos, auto)) {
-                        JOptionPane.showMessageDialog(this, "Auto editado con éxito");
-                        this.dispose();
-                    }
-                }
-            }
-        }
+    this.dispose();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         
-        if (this.getTitle().equals("Editar Auto")){
-            txtIdCarrera.setText(auto.getPlaca());
-            txtIdCarrera.setEnabled(false);
-            txtNombreCarrera.setText(auto.getMarca());
-            txtModelo.setText(auto.getModelo());
-            txtAnio.setText(String.valueOf(auto.getAnio()));
-            txtPrecio.setText(String.valueOf(auto.getPrecioPorDia()));
-        }
+    
             
     }//GEN-LAST:event_formWindowActivated
 

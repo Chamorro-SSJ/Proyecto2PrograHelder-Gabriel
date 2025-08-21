@@ -5,8 +5,12 @@
 package vista;
 
 
+import datos.AlmacenamientoCarreras;
+import java.awt.Frame;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import logica.Carrera;
 
 /**
  *
@@ -14,23 +18,19 @@ import javax.swing.table.DefaultTableModel;
  */
 public class DlgCarreras extends javax.swing.JDialog {
 
-    protected AgenciaRentaCar listaAutos;
+     private AlmacenamientoCarreras almCarreras;
     private DefaultTableModel tblModel;
 
     /**
      * Creates new form DlgGestionAutos
      */
     public DlgCarreras(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
-        initComponents();
-    }
+    super(parent, modal);
+    initComponents();
+    almCarreras = new AlmacenamientoCarreras(); // ⚠️ Agregado
+    cargarTabla(almCarreras.listarTodos());
+}
 
-    public DlgCarreras(java.awt.Frame parent, boolean modal,
-            AgenciaRentaCar listaAutos) {
-        super(parent, modal);
-        initComponents();
-        this.listaAutos = listaAutos;
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -48,7 +48,7 @@ public class DlgCarreras extends javax.swing.JDialog {
         btnEditar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblAutos = new javax.swing.JTable();
+        tblCarrera = new javax.swing.JTable();
         lblCant = new javax.swing.JLabel();
         txtCant = new javax.swing.JTextField();
 
@@ -71,7 +71,6 @@ public class DlgCarreras extends javax.swing.JDialog {
         });
 
         btnInsertar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnInsertar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/insert.png"))); // NOI18N
         btnInsertar.setText("Insertar");
         btnInsertar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -80,7 +79,6 @@ public class DlgCarreras extends javax.swing.JDialog {
         });
 
         btnEditar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/editar.png"))); // NOI18N
         btnEditar.setText("Editar");
         btnEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -89,7 +87,6 @@ public class DlgCarreras extends javax.swing.JDialog {
         });
 
         btnEliminar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/eliminar.png"))); // NOI18N
         btnEliminar.setText("Eliminar");
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -106,7 +103,7 @@ public class DlgCarreras extends javax.swing.JDialog {
                 .addComponent(lblBuscar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnInsertar, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -127,7 +124,7 @@ public class DlgCarreras extends javax.swing.JDialog {
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
-        tblAutos.setModel(new javax.swing.table.DefaultTableModel(
+        tblCarrera.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -135,7 +132,7 @@ public class DlgCarreras extends javax.swing.JDialog {
 
             }
         ));
-        jScrollPane1.setViewportView(tblAutos);
+        jScrollPane1.setViewportView(tblCarrera);
 
         lblCant.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblCant.setText("Cantidad de registros:");
@@ -176,13 +173,32 @@ public class DlgCarreras extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+private void cargarTabla(List<Carrera> lista) {
+    if (lista == null) lista = List.of();
+
+   tblModel = new DefaultTableModel(
+    new Object[][] {},
+    new String[] {"IdCarrera", "Nombre", "Grado"}
+) {
+    @Override
+    public boolean isCellEditable(int row, int column) {
+        return false;
+    }
+};
+
+    for (Carrera c : lista) {
+        tblModel.addRow(new Object[] {c.getIdCarrera(), c.getNomCarrera(), c.getGrado()});
+    }
+
+    tblCarrera.setModel(tblModel);
+    txtCant.setText(String.valueOf(lista.size()));
+}
 
     private void btnInsertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarActionPerformed
-        DlgNuevoAuto win = new DlgNuevoAuto(null, true,
-                listaAutos);
-        win.setTitle("Agregar Auto");
-        win.setVisible(true);
-        this.listaAutos = win.listaAutos;
+         DlgNuevaCarrera dlg = new DlgNuevaCarrera((Frame) this.getParent(), true);
+        dlg.initInsertar(almCarreras); // Pasa tu almacenamiento de carreras
+        dlg.setVisible(true);
+        cargarTabla(almCarreras.listarTodos());
     }//GEN-LAST:event_btnInsertarActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
@@ -190,76 +206,41 @@ public class DlgCarreras extends javax.swing.JDialog {
     }//GEN-LAST:event_formWindowActivated
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        if (tblAutos.getSelectedRowCount() == 1) {
-            String placa = listaAutos.getListaAutos()[tblAutos.getSelectedRow()].getPlaca();
-            int resp = JOptionPane.showConfirmDialog(this, "Quiere eliminar el auto");
-            //System.out.println(resp);
-            if (resp == 0) {  //Sí quiere eliminar el auto
-                if (listaAutos.eliminarAuto(placa)) {
-                    JOptionPane.showMessageDialog(this, "Auto eliminado");
-                }
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar 1 Auto");
-        }
+        int fila = tblCarrera.getSelectedRow();
+    if (fila >= 0) {
+        Carrera seleccionado = almCarreras.listarTodos().get(fila);
+        almCarreras.eliminar(seleccionado.getIdCarrera());
+        cargarTabla(almCarreras.listarTodos());
+    } else {
+        JOptionPane.showMessageDialog(this, "Seleccione una carrera para eliminar");
+    }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        if (tblAutos.getSelectedRowCount() == 1) {
-            int pos = tblAutos.getSelectedRow();
-            String placa = listaAutos.getListaAutos()[tblAutos.getSelectedRow()].getPlaca();
-            String marca = listaAutos.getListaAutos()[tblAutos.getSelectedRow()].getMarca();
-            String modelo = listaAutos.getListaAutos()[tblAutos.getSelectedRow()].getModelo();
-            int anio = listaAutos.getListaAutos()[tblAutos.getSelectedRow()].getAnio();
-            double precio = listaAutos.getListaAutos()[tblAutos.getSelectedRow()].getPrecioPorDia();
-
-            Auto auto = new Auto(placa, marca, modelo, anio, precio);
-
-            DlgNuevoAuto winEditar = new DlgNuevoAuto(null, true, listaAutos, auto, pos);
-
-            winEditar.setTitle("Editar Auto");
-            winEditar.setVisible(true);
-
-            this.listaAutos = winEditar.listaAutos;
-        } else {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar 1 Auto");
-        }
+       int fila = tblCarrera.getSelectedRow();
+    if (fila >= 0) {
+        Carrera seleccionado = almCarreras.listarTodos().get(fila);
+        DlgNuevaCarrera dlg = new DlgNuevaCarrera((Frame) this.getParent(), true);
+        dlg.initEditar(seleccionado, almCarreras);
+        dlg.setVisible(true);
+        cargarTabla(almCarreras.listarTodos());
+    } else {
+        JOptionPane.showMessageDialog(this, "Seleccione una carrera para editar");
+    }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
-        String titulo[] = {"Placa", "Marca", "Modelo", "Año", "Precio Día"};
-        Auto auto;
-        tblModel = new DefaultTableModel(null, titulo);
-        for (int i = 0; i < listaAutos.getNumRegs(); i++) {
-            auto = listaAutos.getListaAutos()[i];
-            if (auto.getPlaca().toLowerCase().contains(txtBuscar.getText().toLowerCase()) ||
-                    auto.getMarca().toLowerCase().contains(txtBuscar.getText().toLowerCase()) ||
-                    auto.getModelo().toLowerCase().contains(txtBuscar.getText().toLowerCase())){
-                Object row[] = {listaAutos.getListaAutos()[i].getPlaca(),
-                    listaAutos.getListaAutos()[i].getMarca(), listaAutos.getListaAutos()[i].getModelo(),
-                    listaAutos.getListaAutos()[i].getAnio(), listaAutos.getListaAutos()[i].getPrecioPorDia()};
-                tblModel.addRow(row);
-            }
-        }
-
-        tblAutos.setModel(tblModel);
-        txtCant.setText(String.valueOf(tblAutos.getRowCount()));
+         String filtro = txtBuscar.getText().trim().toLowerCase();
+    List<Carrera> filtradas = almCarreras.listarTodos().stream()
+        .filter(c -> c.getNomCarrera().toLowerCase().contains(filtro))
+        .toList();
+    cargarTabla(filtradas);
     }//GEN-LAST:event_txtBuscarKeyReleased
-
     private void muestraTabla() {
-        String titulo[] = {"Placa", "Marca", "Modelo", "Año", "Precio Día"};
+    cargarTabla(almCarreras.listarTodos());
+}
 
-        tblModel = new DefaultTableModel(null, titulo);
-        for (int i = 0; i < listaAutos.getNumRegs(); i++) {
-            Object row[] = {listaAutos.getListaAutos()[i].getPlaca(),
-                listaAutos.getListaAutos()[i].getMarca(), listaAutos.getListaAutos()[i].getModelo(),
-                listaAutos.getListaAutos()[i].getAnio(), listaAutos.getListaAutos()[i].getPrecioPorDia()};
-            tblModel.addRow(row);
-        }
-
-        tblAutos.setModel(tblModel);
-        txtCant.setText(String.valueOf(tblAutos.getRowCount()));
-    }
+  
 
     /**
      * @param args the command line arguments
@@ -312,7 +293,7 @@ public class DlgCarreras extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblBuscar;
     private javax.swing.JLabel lblCant;
-    private javax.swing.JTable tblAutos;
+    private javax.swing.JTable tblCarrera;
     private javax.swing.JTextField txtBuscar;
     private javax.swing.JTextField txtCant;
     // End of variables declaration//GEN-END:variables
