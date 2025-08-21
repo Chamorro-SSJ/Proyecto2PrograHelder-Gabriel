@@ -4,7 +4,10 @@
  */
 package vista;
 
+import datos.AlmacenamientoCarreras;
+import datos.AlmacenamientoEstudiantes;
 import java.awt.Window;
+import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 /**
@@ -12,6 +15,8 @@ import javax.swing.SwingUtilities;
  * @author helde
  */
 public class FrmSistemaPrincipal extends javax.swing.JFrame {
+private AlmacenamientoEstudiantes almacenamientoEstudiantes = new AlmacenamientoEstudiantes();
+private AlmacenamientoCarreras almacenamientoCarreras = new AlmacenamientoCarreras();
 
     /**
      * Creates new form FrmSistemaPrincipal
@@ -36,6 +41,7 @@ public class FrmSistemaPrincipal extends javax.swing.JFrame {
         btnPagosMensuales = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -76,6 +82,10 @@ public class FrmSistemaPrincipal extends javax.swing.JFrame {
         });
 
         jMenu1.setText("Menu");
+
+        jMenuItem1.setText("jMenuItem1");
+        jMenu1.add(jMenuItem1);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Acerca de");
@@ -122,11 +132,9 @@ public class FrmSistemaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGestionEstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGestionEstActionPerformed
-        // TODO add your handling code here:
-        DlgEstudiante dlg = new DlgEstudiante(this, true);
-        dlg.setLocationRelativeTo(this); // Centra la nueva ventana respecto a la actual
-        dlg.setVisible(true); // Muestra el dlg
-        this.setVisible(false);//Esconde esta ventana
+DlgEstudiante dlg = new DlgEstudiante(this, almacenamientoEstudiantes, almacenamientoCarreras);
+dlg.setVisible(true);
+
     }//GEN-LAST:event_btnGestionEstActionPerformed
 
     private void btnAsignarBeneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignarBeneActionPerformed
@@ -206,5 +214,6 @@ public class FrmSistemaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     // End of variables declaration//GEN-END:variables
 }
