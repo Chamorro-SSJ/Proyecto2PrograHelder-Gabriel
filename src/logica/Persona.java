@@ -1,23 +1,19 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package logica;
 
-import java.util.Calendar;
+import java.time.LocalDate;
 import java.util.Objects;
 
 public abstract class Persona {
-    private String cedula;      // único
+    private String cedula;
     private String nombre;
-    private Calendar fechNac;
+    private LocalDate fechNac;
     private String direccion;
     private String telefono;
     private String email;
 
     protected Persona() {}
 
-    protected Persona(String cedula, String nombre, Calendar fechNac,
+    protected Persona(String cedula, String nombre, LocalDate fechNac,
                       String direccion, String telefono, String email) {
         this.cedula = cedula;
         this.nombre = nombre;
@@ -26,7 +22,6 @@ public abstract class Persona {
         this.telefono = telefono;
         this.email = email;
     }
-     
 
     public String getCedula() {
         return cedula;
@@ -44,11 +39,11 @@ public abstract class Persona {
         this.nombre = nombre;
     }
 
-    public Calendar getFechNac() {
+    public LocalDate getFechNac() {
         return fechNac;
     }
 
-    public void setFechNac(Calendar fechNac) {
+    public void setFechaNacimiento(LocalDate fechNac) {
         this.fechNac = fechNac;
     }
 
@@ -76,8 +71,6 @@ public abstract class Persona {
         this.email = email;
     }
 
-    
-   
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -87,7 +80,9 @@ public abstract class Persona {
     }
 
     @Override
-    public int hashCode() { return Objects.hash(cedula); }
+    public int hashCode() {
+        return Objects.hash(cedula);
+    }
 
     @Override
     public String toString() {

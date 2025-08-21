@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package datos;
 
 import logica.Estudiante;
@@ -47,27 +43,29 @@ public class AlmacenamientoEstudiantes {
                 .collect(Collectors.toList());
     }
 
-    public void modificar(Estudiante e, AlmacenamientoCarreras almCarreras) {
-        Estudiante found = buscarPorCarnet(e.getCarnet())
-                .orElseThrow(() -> new IllegalArgumentException("Estudiante no existe: " + e.getCarnet()));
-        // Validar carrera
-        if (!almCarreras.existeId(e.getIdCarrera()))
-            throw new IllegalArgumentException("Carrera no existe: " + e.getIdCarrera());
-        // Actualizar campos mutables (carnet es PK, no lo cambiamos aquí)
-        found.setNombre(e.getNombre());
-        found.setFechNac(e.getFechNac());
-        found.setDireccion(e.getDireccion());
-        found.setTelefono(e.getTelefono());
-        found.setEmail(e.getEmail());
-        found.setFechIngreso(e.getFechIngreso());
-        found.setFechEgreso(e.getFechEgreso());
-        found.setIdCarrera(e.getIdCarrera());
-    }
+   public void modificar(Estudiante e, AlmacenamientoCarreras almCarreras) {
+    Estudiante found = buscarPorCarnet(e.getCarnet())
+            .orElseThrow(() -> new IllegalArgumentException("Estudiante no existe: " + e.getCarnet()));
+
+    if (!almCarreras.existeId(e.getIdCarrera()))
+        throw new IllegalArgumentException("Carrera no existe: " + e.getIdCarrera());
+
+    found.setNombre(e.getNombre());
+    found.setFechaNacimiento(e.getFechNac());     // ← corregido
+    found.setDireccion(e.getDireccion());
+    found.setTelefono(e.getTelefono());
+    found.setEmail(e.getEmail());
+    found.setFechaIngreso(e.getFechIngreso());    // ← corregido
+    found.setFechaEgreso(e.getFechEgreso());      // ← corregido
+    found.setIdCarrera(e.getIdCarrera());
+}
+
 
     public void eliminarPorCarnet(String carnet) {
         lista.removeIf(x -> x.getCarnet().equalsIgnoreCase(carnet));
     }
 
-    public List<Estudiante> listarTodos() { return new ArrayList<>(lista); }
+    public List<Estudiante> listarTodos() {
+        return new ArrayList<>(lista);
+    }
 }
-

@@ -1,14 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package datos;
 
 import logica.Beneficio;
 import logica.PagosMensuales;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -35,10 +31,13 @@ public class AlmacenamientoPagosMensuales {
         return lista.stream().anyMatch(x -> x.getMes() == mes && x.getAnio() == anio);
     }
 
-    public List<PagosMensuales> listarTodos() { return new ArrayList<>(lista); }
+    public List<PagosMensuales> listarTodos() {
+        return new ArrayList<>(lista);
+    }
 
     public List<PagosMensuales> listarPorMesAnio(int mes, int anio) {
-        return lista.stream().filter(x -> x.getMes() == mes && x.getAnio() == anio)
+        return lista.stream()
+                .filter(x -> x.getMes() == mes && x.getAnio() == anio)
                 .collect(Collectors.toList());
     }
 
@@ -50,18 +49,18 @@ public class AlmacenamientoPagosMensuales {
         ).collect(Collectors.toList());
     }
 
-    // Regla: no generar planilla de un mes/anio anterior al actual
+    // Regla: no generar planilla de un mes/año anterior al actual
     private void validarFechaPlanillaNoPasada(int mes, int anio) {
-        Calendar hoy = Calendar.getInstance();
-        int mesActual = hoy.get(Calendar.MONTH) + 1;
-        int anioActual = hoy.get(Calendar.YEAR);
+        LocalDate hoy = LocalDate.now();
+        int mesActual = hoy.getMonthValue();
+        int anioActual = hoy.getYear();
         if (anio < anioActual || (anio == anioActual && mes < mesActual)) {
             throw new IllegalArgumentException("No se puede generar planilla para un mes/año anterior al actual.");
         }
     }
 
     // Genera un registro por cada estudiante con beneficios asignados
-    public List<PagosMensuales> generarPlanilla(int mes, int anio, Calendar fechaPago,
+    public List<PagosMensuales> generarPlanilla(int mes, int anio, LocalDate fechaPago,
                                                 AlmacenamientoEstudiantes almEst,
                                                 AlmacenamientoBeneficiosEstudiantes almBE,
                                                 AlmacenamientoBeneficios almBen) {
@@ -70,27 +69,28 @@ public class AlmacenamientoPagosMensuales {
             throw new IllegalArgumentException("Ya existe planilla para " + PagosMensuales.nombreMes(mes) + " " + anio);
 
         List<PagosMensuales> generados = new ArrayList<>();
-        Calendar ahora = Calendar.getInstance();
+        LocalDate ahora = LocalDate.now();
 
         almEst.listarTodos().forEach(est -> {
             List<Integer> idsBen = almBE.listarIdBeneficiosPorEstudiante(est.getCedula());
             if (idsBen.isEmpty()) return; // estudiante sin beneficios -> no se genera pago
 
-            double total = 0.0;
-            for (Integer idb : idsBen) {
-                Optional<Beneficio> ben = almBen.buscarPorId(idb);
-                if (ben.isPresent()) total += ben.get().getMontoBeneficio();
-            }
+            double total = idsBen.stream()
+                    .map(idb -> almBen.buscarPorId(idb))
+                    .filter(Optional::isPresent)
+                    .mapToDouble(opt -> opt.get().getMontoBeneficio())
+                    .sum();
+
             double seguro = PagosMensuales.calcularSeguro(total);
             double renta = PagosMensuales.calcularRenta(total);
             double neto = total - seguro - renta;
 
             PagosMensuales pago = new PagosMensuales(
                     siguienteIdPago(),
-                    (Calendar) ahora.clone(),
+                    ahora,
                     mes,
                     anio,
-                    (Calendar) fechaPago.clone(),
+                    fechaPago,
                     est.getCedula(),
                     redondear2(total),
                     redondear2(seguro),
@@ -108,4 +108,3 @@ public class AlmacenamientoPagosMensuales {
         return Math.round(val * 100.0) / 100.0;
     }
 }
-

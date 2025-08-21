@@ -4,41 +4,44 @@
  */
 package vista;
 
-import java.util.Calendar;
+import datos.AlmacenamientoCarreras;
+import datos.AlmacenamientoEstudiantes;
+import java.awt.Frame;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import javax.swing.JOptionPane;
+import logica.Carrera;
+import logica.Estudiante;
 
 /**
  *
  * @author jonat
  */
 public class DlgNuevoEstudiante extends javax.swing.JDialog {
+    private AlmacenamientoEstudiantes almEstudiantes;
+    private AlmacenamientoCarreras almCarreras;
+    private Estudiante estudianteOriginal;
 
-//    AgenciaRentaCar listaAutos;
-//    Auto auto;
-//    int pos;
+
     /**
      * Creates new form DlgNuevoAuto
      */
-    public DlgNuevoEstudiante(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
-        initComponents();
+   public DlgNuevoEstudiante(Frame parent, boolean modal) {
+    super(parent, modal);
+    initComponents();
+
+
+}
+
+// Método para limpiar los campos del formulario
+    private void limpiarCampos() {
+        txtCedulaEst.setText("");
+        txtNombreEst.setText("");
+        dtFechaNac.setDate(null); // Si usás JDateChooser
+        cmbxCarrera.setSelectedIndex(-1); // Deja el combo sin selección
     }
 
-    public DlgNuevoEstudiante(java.awt.Frame parent, boolean modal,
-            AgenciaRentaCar listaAutos) {
-        super(parent, modal);
-        initComponents();
-        this.listaAutos = listaAutos;
-    }
-    
-    public DlgNuevoEstudiante(java.awt.Frame parent, boolean modal,
-            AgenciaRentaCar listaAutos, Auto auto, int pos) {
-        super(parent, modal);
-        initComponents();
-        this.listaAutos = listaAutos;
-        this.auto = auto;
-        this.pos = pos;
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -49,9 +52,6 @@ public class DlgNuevoEstudiante extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        dtpFechaDespido = new com.github.lgooddatepicker.components.DatePicker();
-        dtpFechaDespido2 = new com.github.lgooddatepicker.components.DatePicker();
-        dtpFechaDespido1 = new com.github.lgooddatepicker.components.DatePicker();
         jPanel1 = new javax.swing.JPanel();
         lblCedulaEst = new javax.swing.JLabel();
         txtCedulaEst = new javax.swing.JTextField();
@@ -69,8 +69,8 @@ public class DlgNuevoEstudiante extends javax.swing.JDialog {
         lblFechaIng = new javax.swing.JLabel();
         lblCarrera = new javax.swing.JLabel();
         cmbxCarrera = new javax.swing.JComboBox<>();
-        dtpFechaNac = new com.github.lgooddatepicker.components.DatePicker();
-        dtpFechaIng = new com.github.lgooddatepicker.components.DatePicker();
+        dtFechaNac = new com.toedter.calendar.JDateChooser();
+        dtFechaIng = new com.toedter.calendar.JDateChooser();
         jPanel2 = new javax.swing.JPanel();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
@@ -161,13 +161,13 @@ public class DlgNuevoEstudiante extends javax.swing.JDialog {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(lblFecNac)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(dtpFechaNac, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(26, 26, 26)
+                                .addComponent(dtFechaNac, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(126, 126, 126)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(lblFechaIng)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(dtpFechaIng, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(dtFechaIng, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(lblCarnet, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -176,7 +176,7 @@ public class DlgNuevoEstudiante extends javax.swing.JDialog {
                                 .addComponent(lblEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtEmailEst, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(105, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -194,12 +194,13 @@ public class DlgNuevoEstudiante extends javax.swing.JDialog {
                     .addComponent(lblCarnet)
                     .addComponent(txtCarnet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblFechaIng)
-                    .addComponent(lblFecNac)
-                    .addComponent(dtpFechaNac, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dtpFechaIng, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(11, 11, 11)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lblFechaIng)
+                        .addComponent(lblFecNac))
+                    .addComponent(dtFechaNac, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dtFechaIng, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(9, 9, 9)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblDireccion)
                     .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -226,6 +227,11 @@ public class DlgNuevoEstudiante extends javax.swing.JDialog {
         btnCancelar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cancelar.png"))); // NOI18N
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -274,60 +280,90 @@ public class DlgNuevoEstudiante extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    private void cargarCarreras() {
+    cmbxCarrera.removeAllItems();
+    for (Carrera c : almCarreras.listarTodos()) {
+    cmbxCarrera.addItem(c.getNomCarrera()); // Solo el texto
+}
+
+}
+
+    public void initInsertar(AlmacenamientoEstudiantes ae, AlmacenamientoCarreras ac) {
+    this.almEstudiantes = ae;
+    this.almCarreras = ac;
+    cargarCarreras();
+}
+public void initEditar(Estudiante estudiante, AlmacenamientoEstudiantes almacenamiento, AlmacenamientoCarreras carreras) {
+    this.almEstudiantes = almacenamiento;
+    this.almCarreras = carreras;
+    this.estudianteOriginal = estudiante;
+    Date fechaNacDate = Date.from(estudiante.getFechNac().atStartOfDay(ZoneId.systemDefault()).toInstant());
+    Date fechaIngDate = Date.from(estudiante.getFechIngreso().atStartOfDay(ZoneId.systemDefault()).toInstant());
+    // Cargar datos en los campos del formulario
+    txtCedulaEst.setText(estudiante.getCedula());
+    txtCedulaEst.setEnabled(false);
+    txtNombreEst.setText(estudiante.getNombre());
+    dtFechaNac.setDate(fechaNacDate);
+    txtDireccion.setText(estudiante.getDireccion());
+    txtTelefonoEst.setText(estudiante.getTelefono());
+    txtEmailEst.setText(estudiante.getEmail());
+    txtCarnet.setText(estudiante.getCarnet());
+    txtCarnet.setEnabled(false);
+    dtFechaIng.setDate(fechaIngDate);
+    cmbxCarrera.setSelectedItem(estudiante.getIdCarrera());
+    
+
+    // Desactivar edición del carnet si no querés que se modifique
+    txtCarnet.setEnabled(false);
+
+    // Cambiar título y botón para indicar modo edición
+    btnGuardar.setText("Actualizar");
+    setTitle("Editar Estudiante");
+
+
+}
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        Auto auto = new Auto();
-        //Validación de campos vacíos
-        if (txtxtCedulaetText().isBlank()
-                || txtNombreEst.getText().isBlank()
-                || txtDireccion.getText().isBlank()
-                || txtTelefonoEst.getText().isBlank()
-                || txtFechaNac.getText().isBlank()) {
 
-            JOptionPane.showMessageDialog(this, "Hay campos vacíos");
-        } else {
+    String cedula = txtCedulaEst.getText().trim();
+    String nombre = txtNombreEst.getText().trim();
+    Date fechaNac = dtFechaNac.getDate();
+    String direccion = txtDireccion.getText().trim();
+    String telefono = txtTelefonoEst.getText().trim();
+    String email = txtEmailEst.getText().trim();
+    String carnet = txtCarnet.getText().trim();
+    Date fechaIng = dtFechaIng.getDate();
+    Carrera carrera = (Carrera) cmbxCarrera.getSelectedItem();
 
-            auto.setPlaca(txtxtCedulaetText());
-            auto.setMarca(txtNombreEst.getText());
-            auto.setModelo(txtDireccion.getText());
+    if (cedula.isEmpty() || nombre.isEmpty() || carnet.isEmpty() || carrera == null) {
+        JOptionPane.showMessageDialog(this, "Campos obligatorios vacíos", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+        LocalDate fechaNacLD = fechaNac.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate fechaIngLD = fechaIng.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-            //Agregar try/catch
-            try {
-                auto.setAnio(Integer.parseInt(txtFechaNac.getText()));
-                auto.setPrecioPorDia(Double.parseDouble(txtTelefonoEst.getText()));
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Año y precio deben ser numéricos");
-            }
+    Estudiante nuevo = new Estudiante();
+    nuevo.setCedula(cedula);
+    nuevo.setNombre(nombre);
+    nuevo.setFechaNacimiento(fechaNacLD);
+    nuevo.setDireccion(direccion);
+    nuevo.setTelefono(telefono);
+    nuevo.setEmail(email);
+    nuevo.setCarnet(carnet);
+    nuevo.setFechaIngreso(fechaIngLD);
+    nuevo.setIdCarrera(carrera.getIdCarrera());
 
-            switch (this.getTitle()) {
-                case "Agregar Auto" -> {
-                    if (listaAutos.agregarAuto(auto)) {
-                        JOptionPane.showMessageDialog(this, "Auto agregado con éxito");
-                        this.dispose();
-                    }else{
-                        JOptionPane.showMessageDialog(this, "Vector Lleno");
-                    }
-                }
-                case "Editar Auto" -> {
-                    if (listaAutos.editarAuto(pos, auto)) {
-                        JOptionPane.showMessageDialog(this, "Auto editado con éxito");
-                        this.dispose();
-                    }
-                }
-            }
-        }
+    almEstudiantes.insertar(nuevo, almCarreras);
+    JOptionPane.showMessageDialog(this, "Estudiante guardado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+    dispose();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+       
+
+
+      
         
-        if (this.getTitle().equals("Editar Auto")){
-            txtxtCedulaetText(auto.getPlaca());
-            txtCedulaEstEnabled(false);
-            txtNombreEst.setText(auto.getMarca());
-            txtDireccion.setText(auto.getModelo());
-            txtFechaNac.setText(String.valueOf(auto.getAnio()));
-            txtTelefonoEst.setText(String.valueOf(auto.getPrecioPorDia()));
-        }
             
     }//GEN-LAST:event_formWindowActivated
 
@@ -338,6 +374,10 @@ public class DlgNuevoEstudiante extends javax.swing.JDialog {
     private void txtCarnetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCarnetActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCarnetActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+      dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -386,11 +426,8 @@ public class DlgNuevoEstudiante extends javax.swing.JDialog {
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JComboBox<String> cmbxCarrera;
-    private com.github.lgooddatepicker.components.DatePicker dtpFechaDespido;
-    private com.github.lgooddatepicker.components.DatePicker dtpFechaDespido1;
-    private com.github.lgooddatepicker.components.DatePicker dtpFechaDespido2;
-    private com.github.lgooddatepicker.components.DatePicker dtpFechaIng;
-    private com.github.lgooddatepicker.components.DatePicker dtpFechaNac;
+    private com.toedter.calendar.JDateChooser dtFechaIng;
+    private com.toedter.calendar.JDateChooser dtFechaNac;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblCarnet;

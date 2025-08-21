@@ -5,32 +5,41 @@
 package vista;
 
 
+import datos.AlmacenamientoEstudiantes;
+import datos.AlmacenamientoCarreras;
+import java.awt.EventQueue;
+import java.awt.Frame;
+import java.awt.Window;
+import java.util.List;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import logica.Carrera;
+import logica.Estudiante;
 
 /**
  *
  * @author jonat
  */
 public class DlgEstudiante extends javax.swing.JDialog {
+    private AlmacenamientoEstudiantes almEstudiantes;
+    private AlmacenamientoCarreras almCarreras;
+    private List<Estudiante> modelo;
+    
+    
 
-    protected AgenciaRentaCar listaAutos;
-    private DefaultTableModel tblModel;
 
     /**
      * Creates new form DlgGestionAutos
      */
-    public DlgEstudiante(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
-        initComponents();
-    }
-
-    public DlgEstudiante(java.awt.Frame parent, boolean modal,
-            AgenciaRentaCar listaAutos) {
-        super(parent, modal);
-        initComponents();
-        this.listaAutos = listaAutos;
-    }
+    public DlgEstudiante(Frame parent, AlmacenamientoEstudiantes almEstudiantes) {
+    super(parent, true);
+    this.almEstudiantes = almEstudiantes;
+    this.almCarreras = almCarreras;
+    initComponents(); // Tu método visual
+}
+  
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -48,7 +57,7 @@ public class DlgEstudiante extends javax.swing.JDialog {
         btnEditar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblAutos = new javax.swing.JTable();
+        tblEstudiante = new javax.swing.JTable();
         lblCant = new javax.swing.JLabel();
         txtCant = new javax.swing.JTextField();
 
@@ -106,7 +115,7 @@ public class DlgEstudiante extends javax.swing.JDialog {
                 .addComponent(lblBuscar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnInsertar, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -127,7 +136,7 @@ public class DlgEstudiante extends javax.swing.JDialog {
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
-        tblAutos.setModel(new javax.swing.table.DefaultTableModel(
+        tblEstudiante.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -135,7 +144,7 @@ public class DlgEstudiante extends javax.swing.JDialog {
 
             }
         ));
-        jScrollPane1.setViewportView(tblAutos);
+        jScrollPane1.setViewportView(tblEstudiante);
 
         lblCant.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblCant.setText("Cantidad de registros:");
@@ -177,132 +186,102 @@ public class DlgEstudiante extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+   private void cargarTabla(List<Estudiante> lista) {
+    modelo = lista;
+    DefaultTableModel m = (DefaultTableModel) tblEstudiante.getModel();
+    m.setRowCount(0); // Limpiar tabla
+
+    for (Estudiante e : lista) {
+        String nombreCarrera = almCarreras.buscarPorId(e.getIdCarrera())
+            .map(Carrera::getNomCarrera)
+            .orElse("Desconocida");
+
+        m.addRow(new Object[] {
+            e.getNombre(),
+            e.getCarnet(),
+            nombreCarrera
+        });
+    }
+
+    txtCant.setText(String.valueOf(lista.size()));
+}
+
+
+
     private void btnInsertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarActionPerformed
-        DlgNuevoAuto win = new DlgNuevoAuto(null, true,
-                listaAutos);
-        win.setTitle("Agregar Auto");
-        win.setVisible(true);
-        this.listaAutos = win.listaAutos;
+    DlgNuevoEstudiante dlg = new DlgNuevoEstudiante((java.awt.Frame) this.getParent(), true);
+    dlg.initInsertar(almEstudiantes, almCarreras);
+    dlg.setVisible(true);
+    cargarTabla(almEstudiantes.listarTodos());
     }//GEN-LAST:event_btnInsertarActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
-        muestraTabla();
+        cargarTabla(modelo);
     }//GEN-LAST:event_formWindowActivated
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        if (tblAutos.getSelectedRowCount() == 1) {
-            String placa = listaAutos.getListaAutos()[tblAutos.getSelectedRow()].getPlaca();
-            int resp = JOptionPane.showConfirmDialog(this, "Quiere eliminar el auto");
-            //System.out.println(resp);
-            if (resp == 0) {  //Sí quiere eliminar el auto
-                if (listaAutos.eliminarAuto(placa)) {
-                    JOptionPane.showMessageDialog(this, "Auto eliminado");
-                }
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar 1 Auto");
-        }
+                                             
+    int fila = tblEstudiante.getSelectedRow();
+    if (fila >= 0) {
+        Estudiante seleccionado = modelo.get(fila);
+        almEstudiantes.eliminarPorCarnet(seleccionado.getCarnet());
+        cargarTabla(almEstudiantes.listarTodos());
+    } else {
+        JOptionPane.showMessageDialog(this, "Debe seleccionar un estudiante para eliminar", "Advertencia", JOptionPane.WARNING_MESSAGE);
+    }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        if (tblAutos.getSelectedRowCount() == 1) {
-            int pos = tblAutos.getSelectedRow();
-            String placa = listaAutos.getListaAutos()[tblAutos.getSelectedRow()].getPlaca();
-            String marca = listaAutos.getListaAutos()[tblAutos.getSelectedRow()].getMarca();
-            String modelo = listaAutos.getListaAutos()[tblAutos.getSelectedRow()].getModelo();
-            int anio = listaAutos.getListaAutos()[tblAutos.getSelectedRow()].getAnio();
-            double precio = listaAutos.getListaAutos()[tblAutos.getSelectedRow()].getPrecioPorDia();
+                                       
+    int fila = tblEstudiante.getSelectedRow();
+    
+    if (fila >= 0) {
+        // Obtener el estudiante seleccionado
+        Estudiante seleccionado = modelo.get(fila);
 
-            Auto auto = new Auto(placa, marca, modelo, anio, precio);
+        Window parentWindow = SwingUtilities.getWindowAncestor(this);
+        DlgNuevoEstudiante dlg = new DlgNuevoEstudiante((Frame) parentWindow, true);
 
-            DlgNuevoAuto winEditar = new DlgNuevoAuto(null, true, listaAutos, auto, pos);
 
-            winEditar.setTitle("Editar Auto");
-            winEditar.setVisible(true);
+        // Inicializar el diálogo con los datos del estudiante
+        dlg.initEditar(seleccionado, almEstudiantes, almCarreras);
 
-            this.listaAutos = winEditar.listaAutos;
-        } else {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar 1 Auto");
-        }
+        // Mostrar el diálogo
+        dlg.setVisible(true);
+
+        // Refrescar la tabla después de cerrar el diálogo
+        cargarTabla(almEstudiantes.listarTodos());
+    } else {
+        JOptionPane.showMessageDialog(this, 
+            "Debe seleccionar un estudiante para editar", 
+            "Advertencia", 
+            JOptionPane.WARNING_MESSAGE);
+    }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
-        String titulo[] = {"Placa", "Marca", "Modelo", "Año", "Precio Día"};
-        Auto auto;
-        tblModel = new DefaultTableModel(null, titulo);
-        for (int i = 0; i < listaAutos.getNumRegs(); i++) {
-            auto = listaAutos.getListaAutos()[i];
-            if (auto.getPlaca().toLowerCase().contains(txtBuscar.getText().toLowerCase()) ||
-                    auto.getMarca().toLowerCase().contains(txtBuscar.getText().toLowerCase()) ||
-                    auto.getModelo().toLowerCase().contains(txtBuscar.getText().toLowerCase())){
-                Object row[] = {listaAutos.getListaAutos()[i].getPlaca(),
-                    listaAutos.getListaAutos()[i].getMarca(), listaAutos.getListaAutos()[i].getModelo(),
-                    listaAutos.getListaAutos()[i].getAnio(), listaAutos.getListaAutos()[i].getPrecioPorDia()};
-                tblModel.addRow(row);
-            }
-        }
+        
+    String texto = txtBuscar.getText();
+    List<Estudiante> filtrados = almEstudiantes.filtrarPorNombre(texto);
+    cargarTabla(filtrados);
+    txtCant.setText(String.valueOf(filtrados.size()));
 
-        tblAutos.setModel(tblModel);
-        txtCant.setText(String.valueOf(tblAutos.getRowCount()));
+
     }//GEN-LAST:event_txtBuscarKeyReleased
 
-    private void muestraTabla() {
-        String titulo[] = {"Placa", "Marca", "Modelo", "Año", "Precio Día"};
-
-        tblModel = new DefaultTableModel(null, titulo);
-        for (int i = 0; i < listaAutos.getNumRegs(); i++) {
-            Object row[] = {listaAutos.getListaAutos()[i].getPlaca(),
-                listaAutos.getListaAutos()[i].getMarca(), listaAutos.getListaAutos()[i].getModelo(),
-                listaAutos.getListaAutos()[i].getAnio(), listaAutos.getListaAutos()[i].getPrecioPorDia()};
-            tblModel.addRow(row);
-        }
-
-        tblAutos.setModel(tblModel);
-        txtCant.setText(String.valueOf(tblAutos.getRowCount()));
-    }
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(DlgEstudiante.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(DlgEstudiante.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(DlgEstudiante.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(DlgEstudiante.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                DlgEstudiante dialog = new DlgEstudiante(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
+      public static void main(String args[]) {
+       EventQueue.invokeLater(() -> {
+       AlmacenamientoEstudiantes almEstudiantes = new AlmacenamientoEstudiantes();
+       AlmacenamientoCarreras almCarreras = new AlmacenamientoCarreras();
+       DlgEstudiante dialog = new DlgEstudiante(new JFrame(), almEstudiantes);
+       dialog.setVisible(true);
+       });
     }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEditar;
@@ -312,7 +291,7 @@ public class DlgEstudiante extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblBuscar;
     private javax.swing.JLabel lblCant;
-    private javax.swing.JTable tblAutos;
+    private javax.swing.JTable tblEstudiante;
     private javax.swing.JTextField txtBuscar;
     private javax.swing.JTextField txtCant;
     // End of variables declaration//GEN-END:variables

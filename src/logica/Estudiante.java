@@ -1,23 +1,22 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package logica;
 
-import java.util.Calendar;
+import java.time.LocalDate;
 import java.util.Objects;
-
+import java.time.ZoneId;
+import java.util.Date;
 public class Estudiante extends Persona {
-    private String carnet;          // PK única
-    private Calendar fechIngreso;
-    private Calendar fechEgreso;
-    private int idCarrera;          // FK a Carrera
+    private String carnet;
+    private LocalDate fechIngreso;
+    private LocalDate fechEgreso;
+    private int idCarrera;
+
 
     public Estudiante() {}
 
-    public Estudiante(String cedula, String nombre, Calendar fechNac,
+   
+    public Estudiante(String cedula, String nombre, LocalDate fechNac,
                       String direccion, String telefono, String email,
-                      String carnet, Calendar fechIngreso, Calendar fechEgreso,
+                      String carnet, LocalDate fechIngreso, LocalDate fechEgreso,
                       int idCarrera) {
         super(cedula, nombre, fechNac, direccion, telefono, email);
         this.carnet = carnet;
@@ -34,19 +33,20 @@ public class Estudiante extends Persona {
         this.carnet = carnet;
     }
 
-    public Calendar getFechIngreso() {
-        return fechIngreso;
-    }
+    public LocalDate getFechIngreso() {
+    return fechIngreso;
+}
 
-    public void setFechIngreso(Calendar fechIngreso) {
+
+    public void setFechaIngreso(LocalDate fechIngreso) {
         this.fechIngreso = fechIngreso;
     }
 
-    public Calendar getFechEgreso() {
+    public LocalDate getFechEgreso() {
         return fechEgreso;
     }
 
-    public void setFechEgreso(Calendar fechEgreso) {
+    public void setFechaEgreso(LocalDate fechEgreso) {
         this.fechEgreso = fechEgreso;
     }
 
@@ -58,9 +58,6 @@ public class Estudiante extends Persona {
         this.idCarrera = idCarrera;
     }
 
-  
-
-    // Igualdad por carnet (PK). Cedula también es única, pero la PK pedida es carnet.
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -70,11 +67,12 @@ public class Estudiante extends Persona {
     }
 
     @Override
-    public int hashCode() { return Objects.hash(carnet); }
+    public int hashCode() {
+        return Objects.hash(carnet);
+    }
 
     @Override
     public String toString() {
         return getNombre() + " - Carnet: " + carnet;
     }
 }
-

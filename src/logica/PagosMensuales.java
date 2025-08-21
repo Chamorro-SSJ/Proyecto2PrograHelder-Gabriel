@@ -1,28 +1,24 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package logica;
 
-import java.util.Calendar;
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class PagosMensuales {
     private int idPago;                 // PK única y consecutiva
-    private Calendar fechCreacion;      // fecha del sistema
-    private int mes;                    // 1-12 (mostrar como texto)
+    private LocalDate fechCreacion;    // fecha del sistema
+    private int mes;                   // 1-12 (mostrar como texto)
     private int anio;
-    private Calendar fechaPago;         // fecha efectiva de pago
-    private String estudiante;          // cedula del estudiante (FK)
+    private LocalDate fechaPago;       // fecha efectiva de pago
+    private String estudiante;         // cedula del estudiante (FK)
     private double totalBeneficios;
-    private double deducSeguro;         // 10%
-    private double deducRenta;          // 5%
-    private double pagoNeto;            // total - deducciones
+    private double deducSeguro;        // 10%
+    private double deducRenta;         // 5%
+    private double pagoNeto;           // total - deducciones
 
     public PagosMensuales() {}
 
-    public PagosMensuales(int idPago, Calendar fechCreacion, int mes, int anio,
-                          Calendar fechaPago, String estudiante,
+    public PagosMensuales(int idPago, LocalDate fechCreacion, int mes, int anio,
+                          LocalDate fechaPago, String estudiante,
                           double totalBeneficios, double deducSeguro,
                           double deducRenta, double pagoNeto) {
         this.idPago = idPago;
@@ -45,11 +41,11 @@ public class PagosMensuales {
         this.idPago = idPago;
     }
 
-    public Calendar getFechCreacion() {
+    public LocalDate getFechCreacion() {
         return fechCreacion;
     }
 
-    public void setFechCreacion(Calendar fechCreacion) {
+    public void setFechCreacion(LocalDate fechCreacion) {
         this.fechCreacion = fechCreacion;
     }
 
@@ -69,11 +65,11 @@ public class PagosMensuales {
         this.anio = anio;
     }
 
-    public Calendar getFechaPago() {
+    public LocalDate getFechaPago() {
         return fechaPago;
     }
 
-    public void setFechaPago(Calendar fechaPago) {
+    public void setFechaPago(LocalDate fechaPago) {
         this.fechaPago = fechaPago;
     }
 
@@ -116,8 +112,6 @@ public class PagosMensuales {
     public void setPagoNeto(double pagoNeto) {
         this.pagoNeto = pagoNeto;
     }
-    
-
 
     public static double calcularSeguro(double totalBeneficios) {
         return totalBeneficios * 0.10;
@@ -128,21 +122,21 @@ public class PagosMensuales {
     }
 
     public static String nombreMes(int mes) {
-        switch (mes) {
-            case 1: return "Enero";
-            case 2: return "Febrero";
-            case 3: return "Marzo";
-            case 4: return "Abril";
-            case 5: return "Mayo";
-            case 6: return "Junio";
-            case 7: return "Julio";
-            case 8: return "Agosto";
-            case 9: return "Septiembre";
-            case 10: return "Octubre";
-            case 11: return "Noviembre";
-            case 12: return "Diciembre";
-            default: return "Mes inválido";
-        }
+        return switch (mes) {
+            case 1 -> "Enero";
+            case 2 -> "Febrero";
+            case 3 -> "Marzo";
+            case 4 -> "Abril";
+            case 5 -> "Mayo";
+            case 6 -> "Junio";
+            case 7 -> "Julio";
+            case 8 -> "Agosto";
+            case 9 -> "Septiembre";
+            case 10 -> "Octubre";
+            case 11 -> "Noviembre";
+            case 12 -> "Diciembre";
+            default -> "Mes inválido";
+        };
     }
 
     @Override
@@ -154,6 +148,7 @@ public class PagosMensuales {
     }
 
     @Override
-    public int hashCode() { return Objects.hash(idPago); }
+    public int hashCode() {
+        return Objects.hash(idPago);
+    }
 }
-

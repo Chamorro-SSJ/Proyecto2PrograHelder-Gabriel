@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
-  <NonVisualComponents>
-    <Component class="com.github.lgooddatepicker.components.DatePicker" name="dtpFechaDespido">
-    </Component>
-    <Component class="com.github.lgooddatepicker.components.DatePicker" name="dtpFechaDespido2">
-    </Component>
-    <Component class="com.github.lgooddatepicker.components.DatePicker" name="dtpFechaDespido1">
-    </Component>
-  </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
   </Properties>
@@ -107,15 +99,15 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="lblFecNac" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="dtpFechaNac" min="-2" pref="185" max="-2" attributes="0"/>
+                                  <Component id="dtFechaNac" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="126" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
                                   <Component id="lblFechaIng" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="dtpFechaIng" min="-2" pref="185" max="-2" attributes="0"/>
+                                  <Component id="dtFechaIng" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" attributes="0">
                                   <Component id="lblCarnet" min="-2" pref="37" max="-2" attributes="0"/>
@@ -130,7 +122,7 @@
                           </Group>
                       </Group>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="105" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -152,13 +144,15 @@
                       <Component id="txtCarnet" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="lblFechaIng" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="lblFecNac" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="dtpFechaNac" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="dtpFechaIng" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="lblFechaIng" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblFecNac" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Component id="dtFechaNac" min="-2" max="-2" attributes="0"/>
+                      <Component id="dtFechaIng" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="lblDireccion" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="txtDireccion" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -289,9 +283,9 @@
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
         </Component>
-        <Component class="com.github.lgooddatepicker.components.DatePicker" name="dtpFechaNac">
+        <Component class="com.toedter.calendar.JDateChooser" name="dtFechaNac">
         </Component>
-        <Component class="com.github.lgooddatepicker.components.DatePicker" name="dtpFechaIng">
+        <Component class="com.toedter.calendar.JDateChooser" name="dtFechaIng">
         </Component>
       </SubComponents>
     </Container>
@@ -354,6 +348,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Cancelar"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCancelarActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
